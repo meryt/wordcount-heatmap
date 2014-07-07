@@ -1,0 +1,73 @@
+<html>
+<head>
+<script type="text/javascript" src="./d3.min.js"></script>
+<script type="text/javascript" src="./cal-heatmap.min.js"></script>
+<link rel="stylesheet" href="./cal-heatmap.css" />
+<style>
+.graph-rect {
+    background-color: #fbfbfb;
+    fill: #fbfbfb;
+}
+.q0 {
+    background-color: #900;
+    fill: #900
+}
+.q1 {
+    background-color: #e0f0f0;
+    fill: #e0f0f0;
+}
+.q2 {
+    background-color: #b2d6f6;
+    fill: #b2d6f6;
+}
+.q3 {
+    background-color: #ada2e7;
+    fill: #ada2e7;
+}
+.q4 {
+    background-color: #cd5ca4;
+    fill: #cd5ca4;
+}
+.q5 {
+    background-color: #C40033;
+    fill: #C40033;
+}
+</style>
+</head>
+<body>
+<!--http://kamisama.github.io/cal-heatmap/v2/-->
+
+<div id="cal-heatmap"><input type="button" name="prev" id="prevbutton" value="Previous" /><input type="button" name="next" id="nextbutton" value="Next" /></div>
+<script type="text/javascript">
+    var dateToTimestamp = function(data) {
+        var stats = {};
+        for (var i = 0; i < data.length; i++) {
+            stats[Date.parse(data[i].Date)/1000] = parseInt(data[i].Words);
+        }
+        return stats;
+    };
+
+    var cal = new CalHeatMap();
+    cal.init({
+        data: "wordcounts.csv",
+        dataType: "csv",
+        afterLoadData: dateToTimestamp,
+        start: new Date(2013,11),
+        domain: "month",
+        subDomain: "x_day",
+        weekStartOnMonday: false,
+        range: 9,
+        cellSize: 14,
+        cellRadius: 0,
+        highlight: "now",
+        legend: [200, 400, 600, 800],
+        itemName: ["word","words"],
+        considerMissingDataAsZero: false,
+        verticalOrientation: false,
+        previousSelector: "#prevbutton",
+        nextSelector: "#nextbutton"
+    });
+</script>
+
+</body>
+</html>
