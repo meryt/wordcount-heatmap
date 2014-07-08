@@ -4,6 +4,9 @@
 <script type="text/javascript" src="./cal-heatmap.min.js"></script>
 <link rel="stylesheet" href="./cal-heatmap.css" />
 <style>
+html {
+    background-color: #fff;
+}
 .graph-rect {
     background-color: #fbfbfb;
     fill: #fbfbfb;
@@ -32,6 +35,10 @@
     background-color: #C40033;
     fill: #C40033;
 }
+.qi {
+    background-color: #ff0;
+    fill: #ff0;
+}
 </style>
 </head>
 <body>
@@ -42,7 +49,7 @@
     var dateToTimestamp = function(data) {
         var stats = {};
         for (var i = 0; i < data.length; i++) {
-            stats[Date.parse(data[i].Date)/1000] = parseInt(data[i].Words);
+            stats[Date.parse(data[i].Date + 'T12:00:00')/1000] = parseInt(data[i].Words);
         }
         return stats;
     };
@@ -52,22 +59,24 @@
         data: "wordcounts.csv",
         dataType: "csv",
         afterLoadData: dateToTimestamp,
-        start: new Date(2013,11),
+        start: new Date(2013,9),
         domain: "month",
         subDomain: "x_day",
         weekStartOnMonday: false,
-        range: 9,
+        range: 10,
         cellSize: 14,
         cellRadius: 0,
-        highlight: "now",
         legend: [200, 400, 600, 800],
         itemName: ["word","words"],
         considerMissingDataAsZero: false,
         verticalOrientation: false,
         previousSelector: "#prevbutton",
-        nextSelector: "#nextbutton"
+        nextSelector: "#nextbutton",
+        highlight: "now",
+        domainGutter: 15
     });
 </script>
 
 </body>
 </html>
+
