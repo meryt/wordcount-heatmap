@@ -74,36 +74,49 @@ var dateToTimestamp = function(data) {
 
 jQuery(document).ready(function($) {
 
-    var yrs = [2014,2013];
-    var cals = {};
-    var cntr = 0;
+    // Load the data only once.
+    d3.csv("wordcounts-ext.csv", function(csvdata) {
 
-    var defaultOpts = {
-        data: "wordcounts-ext.csv",
-        dataType: "csv",
-        afterLoadData: dateToTimestamp,
-        domain: "month",
-        subDomain: "x_day",
-        weekStartOnMonday: false,
-        range: 4,
-        cellSize: 24,
-        cellRadius: 0,
-        legend: [200, 400, 600, 800],
-        itemName: ["word","words"],
-        considerMissingDataAsZero: false,
-        verticalOrientation: false,
-        domainGutter: 15,
-        label: {
-            position: "top"
-        },
-        subDomainTextFormat: function(date,val) {
-            return val;
+        /*
+        var wordCountData = {};
+        for (var row in csvdata) {
+            var rowdata = csvdata[row];
+            wordCountData[rowdata['Date']] = { rowdata['Project'] : rowdata['Words'] }];
         }
-    };
+        */
 
-    for (var yr in yrs) {
-        $("#cal-container").append('<h2>' + yrs[yr] + '</h2>');
-        for (var j = 0; j < 3; j++) {
+        var yrs = [2014,2013];
+        var cals = {};
+        var cntr = 0;
+
+        var defaultOpts = {
+            data: csvdata,
+            afterLoadData: dateToTimestamp,
+            domain: "month",
+            subDomain: "x_day",
+            weekStartOnMonday: false,
+            range: 4,
+            cellSize: 24,
+            cellRadius: 0,
+            legend: [200, 400, 600, 800],
+            itemName: ["word","words"],
+            considerMissingDataAsZero: false,
+            verticalOrientation: false,
+            domainGutter: 15,
+            label: {
+                position: "top"
+            },
+            subDomainTextFormat: function(date,val) {
+                return val;
+            },
+            onClick: function(date, val) {
+                window.alert('You clicked ' + date);
+            }
+        };
+
+        for (var yr in yrs) {
+            $("#cal-container").append('<h2>' + yrs[yr] + '</h2>');
+            for (var j = 0; j < 3; j++) {
                 var myId = "cal" + cntr++;
                 jQuery("#cal-container").append('<div id="' + myId + '"></div>');
                 cals[myId] = new CalHeatMap();
@@ -114,39 +127,11 @@ jQuery(document).ready(function($) {
                 };
                 jQuery.extend(myOpts, defaultOpts);
                 cals[myId].init(myOpts);
-        }
-    }
-});
-
-    /*
-    var cal = new CalHeatMap();
-    cal.init({
-        data: "wordcounts-ext.csv",
-        dataType: "csv",
-        afterLoadData: dateToTimestamp,
-        start: new Date(2013,9),
-        domain: "month",
-        subDomain: "x_day",
-        weekStartOnMonday: false,
-        range: 10,
-        cellSize: 24,
-        cellRadius: 0,
-        legend: [200, 400, 600, 800],
-        itemName: ["word","words"],
-        considerMissingDataAsZero: false,
-        verticalOrientation: false,
-        previousSelector: "#prevbutton",
-        nextSelector: "#nextbutton",
-        highlight: "now",
-        domainGutter: 15,
-        label: {
-            position: "top"
-        },
-        subDomainTextFormat: function(date,val) {
-            return val;
+            }
         }
     });
-*/
+
+});
 </script>
 
 </body>
