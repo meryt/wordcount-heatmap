@@ -1,5 +1,6 @@
 <html>
 <head>
+<script type="text/javascript" src="./jquery-2.1.1.min.js"></script>
 <script type="text/javascript" src="./d3.min.js"></script>
 <script type="text/javascript" src="./cal-heatmap.min.js"></script>
 <link rel="stylesheet" href="./cal-heatmap.css" />
@@ -39,24 +40,88 @@ html {
     background-color: #ff0;
     fill: #ff0;
 }
+.subdomain-text {
+    color: #fff;
+    fill: #fff;
+}
+div#cal-container {
+    margin: 0 auto 40px;
+    width: 780px;
+}
+h2 {
+    text-align: center;
+}
+
 </style>
 </head>
 <body>
 <!--http://kamisama.github.io/cal-heatmap/-->
 
-<div id="cal-heatmap"><input type="button" name="prev" id="prevbutton" value="Previous" /><input type="button" name="next" id="nextbutton" value="Next" /></div>
+<div id="cal-container"></div>
+<div id="cal-heatmap"></div>
+
 <script type="text/javascript">
-    var dateToTimestamp = function(data) {
-        var stats = {};
-        for (var i = 0; i < data.length; i++) {
+
+var dateToTimestamp = function(data) {
+    var stats = {};
+    for (var i = 0; i < data.length; i++) {
+        //if (data[i].Project == 'Anne') {
             stats[Date.parse(data[i].Date + 'T12:00:00')/1000] = parseInt(data[i].Words);
+        //}
+    }
+    return stats;
+};
+
+jQuery(document).ready(function($) {
+
+    var yrs = [2014,2013];
+    var cals = {};
+    var cntr = 0;
+
+    var defaultOpts = {
+        data: "wordcounts-ext.csv",
+        dataType: "csv",
+        afterLoadData: dateToTimestamp,
+        domain: "month",
+        subDomain: "x_day",
+        weekStartOnMonday: false,
+        range: 4,
+        cellSize: 24,
+        cellRadius: 0,
+        legend: [200, 400, 600, 800],
+        itemName: ["word","words"],
+        considerMissingDataAsZero: false,
+        verticalOrientation: false,
+        domainGutter: 15,
+        label: {
+            position: "top"
+        },
+        subDomainTextFormat: function(date,val) {
+            return val;
         }
-        return stats;
     };
 
+    for (var yr in yrs) {
+        $("#cal-container").append('<h2>' + yrs[yr] + '</h2>');
+        for (var j = 0; j < 3; j++) {
+                var myId = "cal" + cntr++;
+                jQuery("#cal-container").append('<div id="' + myId + '"></div>');
+                cals[myId] = new CalHeatMap();
+                var myOpts = {
+                    start: new Date(yrs[yr], j*4),
+                    range: 4,
+                    itemSelector: "#" + myId
+                };
+                jQuery.extend(myOpts, defaultOpts);
+                cals[myId].init(myOpts);
+        }
+    }
+});
+
+    /*
     var cal = new CalHeatMap();
     cal.init({
-        data: "wordcounts.csv",
+        data: "wordcounts-ext.csv",
         dataType: "csv",
         afterLoadData: dateToTimestamp,
         start: new Date(2013,9),
@@ -64,7 +129,7 @@ html {
         subDomain: "x_day",
         weekStartOnMonday: false,
         range: 10,
-        cellSize: 16,
+        cellSize: 24,
         cellRadius: 0,
         legend: [200, 400, 600, 800],
         itemName: ["word","words"],
@@ -73,8 +138,15 @@ html {
         previousSelector: "#prevbutton",
         nextSelector: "#nextbutton",
         highlight: "now",
-        domainGutter: 15
+        domainGutter: 15,
+        label: {
+            position: "top"
+        },
+        subDomainTextFormat: function(date,val) {
+            return val;
+        }
     });
+*/
 </script>
 
 </body>
