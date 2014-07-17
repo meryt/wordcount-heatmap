@@ -66,7 +66,9 @@ var dateToTimestamp = function(data) {
     var stats = {};
     for (var i = 0; i < data.length; i++) {
         //if (data[i].Project == 'Anne') {
-            stats[Date.parse(data[i].Date + 'T12:00:00')/1000] = parseInt(data[i].Words);
+            if (parseInt(data[i].Words)) {
+                stats[Date.parse(data[i].Date + 'T12:00:00')/1000] = parseInt(data[i].Words);
+            }
         //}
     }
     return stats;
