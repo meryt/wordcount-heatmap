@@ -3,6 +3,7 @@
 <script type="text/javascript" src="./jquery-2.1.1.min.js"></script>
 <script type="text/javascript" src="./d3.min.js"></script>
 <script type="text/javascript" src="./cal-heatmap.min.js"></script>
+<script type="text/javascript" src="./moment.min.js"></script>
 <link rel="stylesheet" href="./cal-heatmap.css" />
 <style>
 html {
@@ -79,13 +80,21 @@ jQuery(document).ready(function($) {
     // Load the data only once.
     d3.csv("wordcounts-ext.csv", function(csvdata) {
 
-        /*
+
         var wordCountData = {};
+
         for (var row in csvdata) {
             var rowdata = csvdata[row];
-            wordCountData[rowdata['Date']] = { rowdata['Project'] : rowdata['Words'] }];
+            var d = rowdata['Date'];
+            var p = rowdata['Project'];
+            var w = rowdata['Words'];
+            if (d && p && w && p != null && p != '') {
+                var t = {};
+                t.Project = p;
+                t.Words = w;
+                wordCountData[d] = t;
+            }
         }
-        */
 
         var yrs = [2014,2013];
         var cals = {};
@@ -112,7 +121,13 @@ jQuery(document).ready(function($) {
                 return val;
             },
             onClick: function(date, val) {
-                window.alert('You clicked ' + date);
+                var dateAsString = moment(date).format('YYYY-MM-DD');
+
+                if (typeof(wordCountData[dateAsString]) != 'undefined') {
+                    window.alert('You clicked ' + dateAsString + " with project " + wordCountData[dateAsString]['Project']);
+                } else {
+                    window.alert('You clicked ' + dateAsString);
+                }
             }
         };
 
