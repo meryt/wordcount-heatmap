@@ -1,0 +1,3 @@
+#!/bin/bash
+
+./wcgraph.py -q -f ./wordcounts-ext.csv -o ./anne.png -t "Actual versus Target" -p Anne

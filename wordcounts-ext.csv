@@ -1,3 +1,7 @@
+#start=2013-09-14
+#start_count=0
+#end=2014-12-31
+#target=150000
 Date,Words,Total Words,Project
 2013-09-15,230,230,Anne
 2013-09-16,744,974,Anne
